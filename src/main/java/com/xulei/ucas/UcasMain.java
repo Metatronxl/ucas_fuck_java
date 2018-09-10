@@ -20,7 +20,7 @@ public class UcasMain {
     //读超时时间
     private static final int SOCKET_TIMEOUT = 35000;
 
-    private static  final String TAG = "CRAWL_XL";
+    private static  final String TAG = "Lei.X";
 
     public static final ThreadLocal<BrowserHttpClient> HTTP_CLIENT_THREAD_LOCAL = new ThreadLocal<BrowserHttpClient>();
 
@@ -35,8 +35,24 @@ public class UcasMain {
         HTTP_CLIENT_THREAD_LOCAL.set(httpClient);
     }
 
+    /**
+     * add login cookie
+     */
+    public static void vertifyHomePage(){
+        try {
+            HTTP_CLIENT_THREAD_LOCAL.get().get(Constants.LOGIN_PAGE,Context.getHttpHeaderByHeader());
+        } catch (IOException e) {
+            log.error(TAG,"首页验证错误");
+        }
+    }
 
+
+    /**
+     * login
+     */
     public static void login(String username,String password){
+
+        vertifyHomePage();
 
         String login_url = Constants.LOGIN_URL;
         Map<String,String> loginMap = new HashMap<>();
@@ -55,7 +71,7 @@ public class UcasMain {
 
 
     public static void main(String[] args) {
-        BrowserHttpClient httpClient = new BrowserHttpClient("127.0.0.1", 0, null, 10000, 10000, true);
+        BrowserHttpClient httpClient = new BrowserHttpClient("127.0.0.1", 8888, null, 10000, 10000, true);
         UcasMain.setHttpClient(httpClient);
 
         UcasMain.login("381827702@qq.com","woshixulei123");
